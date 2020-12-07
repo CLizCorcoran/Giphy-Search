@@ -1,0 +1,9 @@
+$brandPadding: 12px;
+
+@mixin standardPadding($value) {
+    padding: $value;
+}
+
+body {
+    @include standardPadding($brandPadding);
+}
