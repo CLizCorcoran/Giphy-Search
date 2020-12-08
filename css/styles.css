@@ -1,2 +1,10 @@
 body {
   padding: 12px; }
+  body #gif-gallery {
+    padding: 12px 0px; }
+    body #gif-gallery img {
+      margin: 6px; }
+    body #gif-gallery button {
+      height: 112px;
+      width: 200px;
+      margin: 6px; }

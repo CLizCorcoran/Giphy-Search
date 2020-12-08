@@ -41,8 +41,10 @@ $(function () {
                     var url = element.images.fixed_width.url;
                     var altText = element.title;
                     var image =
-                        $('#gif-gallery').append(`<img src="${url}" alt="${altText}" />`);
+                        $('#gif-gallery').append(`<img src="${url}" alt="${altText}" class="hoverable"/>`);
                 })
+
+                addLoadMoreButton();
             }
         );
     };
@@ -60,12 +62,18 @@ $(function () {
                 $(data.data).each(function (index, element) {
                     var url = element.images.fixed_width.url;
                     var altText = element.title;
-                    var image =
-                        $('#gif-gallery').append(`<img src="${url}" alt="${altText}" />`);
+                    $('#gif-gallery').append(`<img src="${url}" alt="${altText}" class="hoverable" />`);
                 })
+
+                addLoadMoreButton();
+
             }
         );
     };
+
+    function addLoadMoreButton() {
+        $('#gif-gallery').append('<button type="button" class="btn btn-Primary hoverable">Load More...</button>');
+    }
 
 
 })

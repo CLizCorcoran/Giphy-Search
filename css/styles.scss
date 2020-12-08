@@ -6,4 +6,19 @@ $brandPadding: 12px;
 
 body {
     @include standardPadding($brandPadding);
+
+    #gif-gallery {
+        padding: $brandPadding 0px;
+
+        img {
+            margin: 6px;
+        }
+
+        button {
+            height: 112px;
+            width: 200px;
+            margin: 6px;
+            
+        }
+    }
 }
