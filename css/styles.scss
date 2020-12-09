@@ -14,11 +14,13 @@ body {
             margin: 6px;
         }
 
-        button {
+        #more {
             height: 112px;
             width: 200px;
             margin: 6px;
-            
+            display: none;            
         }
     }
 }
+
+
