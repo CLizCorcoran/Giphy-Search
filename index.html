@@ -18,11 +18,21 @@
 
 <body>
     <header>
-        <h1>Find My GIF</h1>
+ 
+        <h1 class="col-4">Find My Gif</h1>
+
+         <input class="col-6" type="text" id="search" placeholder="Search..."
+        <span class="input-group-append col-2">
+            <button class="btn btn-secondary">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
+        </span>
+         <br>
         <hr>
     </header>
 
     <main>
+        <div class="container">
         <div id="search">
            <select class="col-3 custom-select" id="category">
                 <option value="0" selected>trending</option>
@@ -35,6 +45,7 @@
 
         <div id="gif-gallery" class="row"></div>
 
+    </div>
  
     </main>
 

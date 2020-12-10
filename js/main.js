@@ -7,7 +7,10 @@ $(function () {
     var loadingLimit = 25;  // Currently this is unchanged.  May add to an option at some point.  
 
    var heart = '<div class="overlay"><i class="far fa-heart"/></div>';
-   
+
+   var air = '<i class="fas fa-air-freshener fresh"></i>';
+
+    
         
     collectCategories();
 
@@ -74,6 +77,10 @@ $(function () {
         jImage.addClass('fas loved');
 
         // Now we need to move the heart out of the overlay div and on top of the image.
+        var jGifDiv = jImage.parents('.div-gif');
+        var jHeart = jImage.find('.fresh');
+        jHeart.show();
+
     });
 
     $('#gif-gallery').on('click', '.fas.fa-heart', function() {
@@ -97,7 +104,7 @@ $(function () {
                 $(data.data).each(function (index, element) {
                     var url = element.images.fixed_width.url;
                     var altText = element.title;
-                    $('#gif-gallery').append(`<div class="div-gif"><img src="${url}" alt="${altText}" />${heart}</div>`);
+                    $('#gif-gallery').append(`<div class="div-gif"><img src="${url}" alt="${altText}" />${air}${heart}</div>`);
                 })
  
                 addLoadMoreButton();

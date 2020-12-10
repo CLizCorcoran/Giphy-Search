@@ -5,7 +5,14 @@ $gifMargin: 6px;
     padding: $value;
 }
 
+h1 {
+    display: inline;
+    margin-right: 20px;
+}
 
+#search {
+    
+}
 
 body {
     @include standardPadding($brandPadding);
@@ -50,7 +57,18 @@ body {
 
         .loved {
             color: red;
-        
+       
+        }
+
+        .fresh {
+            position: absolute;
+            top: $gifMargin;
+            right: $gifMargin;
+             color: green;
+            font-size: 20px;
+            padding: $gifMargin;
+            z-index: 2;
+            display: none;
         }
     }
 }

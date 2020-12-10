@@ -1,3 +1,7 @@
+h1 {
+  display: inline;
+  margin-right: 20px; }
+
 body {
   padding: 12px; }
   body #gif-gallery {
@@ -31,3 +35,12 @@ body {
       z-index: 1; }
     body #gif-gallery .loved {
       color: red; }
+    body #gif-gallery .fresh {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      color: green;
+      font-size: 20px;
+      padding: 6px;
+      z-index: 2;
+      display: none; }
