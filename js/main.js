@@ -141,11 +141,13 @@ $(function () {
 
     function collectCategories() {
         $.get(
-            'https://api.giphy.com/v1/gifs/categories?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
+            //'https://api.giphy.com/v1/gifs/categories?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
+            'https://api.giphy.com/v1/trending/searches?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
             (data) => {
-                
-                var text = 'hello world';
- 
+
+                for (var x=0; x < 12; x++) {
+                    $('#category-bar').append(`<button type="button" class="btn btn-secondary">${data.data[x]}</button>`);
+                }
             }
         );
     };
