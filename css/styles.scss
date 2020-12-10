@@ -1,8 +1,11 @@
 $brandPadding: 12px;
+$gifMargin: 6px;
 
 @mixin standardPadding($value) {
     padding: $value;
 }
+
+
 
 body {
     @include standardPadding($brandPadding);
@@ -11,14 +14,43 @@ body {
         padding: $brandPadding 0px;
 
         img {
-            margin: 6px;
+            margin: $gifMargin;
+            z-index: -1;
         }
 
         #more {
             height: 112px;
             width: 200px;
-            margin: 6px;
-            display: none;            
+            margin: $gifMargin;
+        }
+
+        .div-gif {
+            position: relative;
+        }
+
+        /*
+        .overlay:hover {
+            opacity: 1;
+        }
+        */
+
+        .overlay {
+            position: absolute;
+            top: $gifMargin;
+            right: $gifMargin;
+            background: rgb(0, 0, 0);
+            background: rgba(0, 0, 0, 0.5); /* Black see-through */
+            opacity: 0;
+            transition: .5s ease;
+            color: white;
+            font-size: 20px;
+            padding: $gifMargin;
+            z-index: 1;
+        }
+
+        .loved {
+            color: red;
+        
         }
     }
 }

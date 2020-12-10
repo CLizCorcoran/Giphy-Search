@@ -6,13 +6,14 @@ $(function () {
     var loadingOffset = 0;
     var loadingLimit = 25;  // Currently this is unchanged.  May add to an option at some point.  
 
-    var heart = '<div class="overlay"><img class="far fa-heart /></div>';
-
+   var heart = '<div class="overlay"><i class="far fa-heart"/></div>';
+   
+        
     collectCategories();
 
     collectTrendingGifs();
 
-    $('#category').change(function () {
+     $('#category').change(function () {
         var jSelect = $(this);
 
         var index = jSelect.val();
@@ -37,7 +38,7 @@ $(function () {
             currentSearch = jItem.text;
             collectSearchGifs(currentSearch);
         }
-    })
+    });
 
     
     $('#gif-gallery').on('click', "button", function() {
@@ -45,7 +46,42 @@ $(function () {
             collectTrendingGifs(loadingOffset);
         else
             collectSearchGifs(currentSearch, loadingOffset);
-    })
+    });
+
+   
+    // When the user mouses into the image, show the overlays (heart, copy link)
+    $('#gif-gallery').on('mouseenter', '.div-gif', function() {
+        var jDiv = $(this);
+
+        var jOverlay = jDiv.find('.overlay');
+
+        jOverlay.css('opacity', '1');
+    });
+
+    $('#gif-gallery').on('mouseleave', '.div-gif', function() {
+        var jDiv = $(this);
+
+        var jOverlay = jDiv.find('.overlay');
+
+        jOverlay.css('opacity', '0');
+    });
+
+    // User action:  clicking on a heart to 'love' a gif.  
+    $('#gif-gallery').on('click', '.far.fa-heart', function() {
+        var jImage = $(this);
+
+        jImage.removeClass('far');
+        jImage.addClass('fas loved');
+
+        // Now we need to move the heart out of the overlay div and on top of the image.
+    });
+
+    $('#gif-gallery').on('click', '.fas.fa-heart', function() {
+        var jImage = $(this);
+
+        jImage.removeClass('fas loved');
+        jImage.addClass('far');
+    });
 
     // Collects and displays the trending gifs.
     function collectTrendingGifs(offset = 0) {
@@ -61,7 +97,7 @@ $(function () {
                 $(data.data).each(function (index, element) {
                     var url = element.images.fixed_width.url;
                     var altText = element.title;
-                    $('#gif-gallery').append(`<img src="${url}" alt="${altText}" />`);
+                    $('#gif-gallery').append(`<div class="div-gif"><img src="${url}" alt="${altText}" />${heart}</div>`);
                 })
  
                 addLoadMoreButton();
@@ -85,7 +121,7 @@ $(function () {
                 $(data.data).each(function (index, element) {
                     var url = element.images.fixed_width.url;
                     var altText = element.title;
-                    $('#gif-gallery').append(`<img src="${url}" alt="${altText}"/>`);
+                    $('#gif-gallery').append(`<div class="div-gif"><img src="${url}" alt="${altText}"/></div>`);
                 })
 
                 addLoadMoreButton();
@@ -105,16 +141,16 @@ $(function () {
  
             }
         );
-    }
+    };
 
  
     function removeLoadMoreButton() {
         $('#more').remove();
-    }
+    };
 
     function addLoadMoreButton() {
         $('#gif-gallery').append('<button type="button" id="more" class="btn btn-Primary hoverable">Load More...</button>');
-    }
+    };
 
 
 })

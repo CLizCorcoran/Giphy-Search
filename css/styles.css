@@ -1,11 +1,33 @@
 body {
   padding: 12px; }
   body #gif-gallery {
-    padding: 12px 0px; }
+    padding: 12px 0px;
+    /*
+        .overlay:hover {
+            opacity: 1;
+        }
+        */ }
     body #gif-gallery img {
-      margin: 6px; }
+      margin: 6px;
+      z-index: -1; }
     body #gif-gallery #more {
       height: 112px;
       width: 200px;
-      margin: 6px;
-      display: none; }
+      margin: 6px; }
+    body #gif-gallery .div-gif {
+      position: relative; }
+    body #gif-gallery .overlay {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: black;
+      background: rgba(0, 0, 0, 0.5);
+      /* Black see-through */
+      opacity: 0;
+      transition: .5s ease;
+      color: white;
+      font-size: 20px;
+      padding: 6px;
+      z-index: 1; }
+    body #gif-gallery .loved {
+      color: red; }
