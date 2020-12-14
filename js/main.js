@@ -16,6 +16,9 @@ $(function () {
 
     collectTrendingGifs();
 
+    //----
+    // Category dropdown - this should go away
+    //----
      $('#category').change(function () {
         var jSelect = $(this);
 
@@ -43,7 +46,9 @@ $(function () {
         }
     });
 
-    
+    //----
+    // The 'more' button was clicked.  This might be best with an id.  
+    //----
     $('#gif-gallery').on('click', "button", function() {
         if (currentCategory == 0)
             collectTrendingGifs(loadingOffset);
@@ -51,8 +56,24 @@ $(function () {
             collectSearchGifs(currentSearch, loadingOffset);
     });
 
+    //----
+    // Remove the more button
+    //----
+    function removeLoadMoreButton() {
+        $('#more').remove();
+    };
+
+    //----
+    // Append the more button to the list of gifs
+    function addLoadMoreButton() {
+        $('#gif-gallery').append('<button type="button" id="more" class="btn btn-Primary hoverable">Load More...</button>');
+    };
+    
+
    
+    //----
     // When the user mouses into the image, show the overlays (heart, copy link)
+    //----
     $('#gif-gallery').on('mouseenter', '.div-gif', function() {
         var jDiv = $(this);
 
@@ -61,6 +82,9 @@ $(function () {
         jOverlay.css('opacity', '1');
     });
 
+    //----
+    // When the user leaves the image, remove the overlay.  
+    //----
     $('#gif-gallery').on('mouseleave', '.div-gif', function() {
         var jDiv = $(this);
 
@@ -69,7 +93,10 @@ $(function () {
         jOverlay.css('opacity', '0');
     });
 
-    // User action:  clicking on a heart to 'love' a gif.  
+
+    //----
+    // User action:  clicking on a heart to 'love' a gif. 
+    //---- 
     $('#gif-gallery').on('click', '.far.fa-heart', function() {
         var jImage = $(this);
 
@@ -83,6 +110,10 @@ $(function () {
 
     });
 
+
+    //----
+    // User action:  clicking a 'loved' heart to unlove the gif. 
+    //----
     $('#gif-gallery').on('click', '.fas.fa-heart', function() {
         var jImage = $(this);
 
@@ -90,7 +121,16 @@ $(function () {
         jImage.addClass('far');
     });
 
+
+    //-------------------------------------------------------------------------------------------------------------
+    //
+    //                  CALLS TO THE GIPHY SERVER
+    //
+    //--------------------------------------------------------------------------------------------------------------
+
+    //----
     // Collects and displays the trending gifs.
+    //----
     function collectTrendingGifs(offset = 0) {
         var url = 'https://api.giphy.com/v1/gifs/trending?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&limit=' + loadingLimit + '&offset=' + loadingOffset + '&rating=g';
         $.get(
@@ -114,7 +154,9 @@ $(function () {
         );
     };
 
+    //----
     // Collects and displays gifs returned by the search string.  
+    //----
     function collectSearchGifs(strSearch, offset = 0) {
         var url = 'https://api.giphy.com/v1/gifs/search?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=' + strSearch + '&limit=' + loadingLimit + '&offset=' + loadingOffset + '&rating=g&lang=en';
         $.get(
@@ -138,7 +180,9 @@ $(function () {
         );
     };
 
-
+    //----
+    // Collects the trending searches
+    //----
     function collectCategories() {
         $.get(
             //'https://api.giphy.com/v1/gifs/categories?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
@@ -153,13 +197,7 @@ $(function () {
     };
 
  
-    function removeLoadMoreButton() {
-        $('#more').remove();
-    };
-
-    function addLoadMoreButton() {
-        $('#gif-gallery').append('<button type="button" id="more" class="btn btn-Primary hoverable">Load More...</button>');
-    };
+ 
 
 
 })
