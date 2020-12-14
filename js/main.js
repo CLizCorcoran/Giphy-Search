@@ -10,10 +10,6 @@ $(function () {
     var heart = '<div class="overlay"><i class="far fa-heart"/></div>';
     var air = '<i class="fas fa-air-freshener fresh"></i>';
 
-    //collectCategories();
-
-
-
     collectTrendingGifs();
 
     collectTrendingSearches();
@@ -41,6 +37,13 @@ $(function () {
             searchGifs(strSearch);
         }
     });
+
+    $('#categories').click(function() {
+        loadingOffset = 0;
+        $('#gif-gallery').empty();
+
+        collectCategories();
+    })
 
     $('#trending').click(function () {
         // Reset variables and current collections.  
@@ -249,11 +252,28 @@ $(function () {
                     $('#trending-searches-dropdown').append(`<button type="button" class="mnu-search dropdown-item">${element}</button>`);
                 })
             }
-        );
+        )
     };
 
 
+    //----
+    // Collects and constructs the Category set of menus.  
+    //----
+    function collectCategories() {
+        $.get(
+            //'https://api.giphy.com/v1/gifs/categories?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
+            'https://api.giphy.com/v1/gifs/categories?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
+            (data) => {
 
+                $(data.data).each(function (index, element) {
+                    var url = element.gif.images.fixed_height.url;
+                    var altText = element.name;
+                    $('#gif-gallery').append(`<div class="div-cat"><text>${element.name}</text><br/><img src="${url}" alt="${altText}"/></div>`);
+                    //$('#categories-dropdown').append(`<button type="button" class="mnu-search dropdown-item">${element.name}</button>`);
+                })
+            }
+        )
+    };
 
-
+  
 })

@@ -10,6 +10,14 @@ h1 {
     margin-right: 20px;
 }
 
+@media (min-width: 1200px) {
+
+    .container {
+         max-width: 1300;
+    }
+}
+
+
 #category-bar {
     width: 100%;
 }
@@ -33,6 +41,17 @@ body {
 
         .div-gif {
             position: relative;
+            height: fit-content;
+        }
+
+        .div-cat {
+            border-style: solid;
+            border-width: 1px;
+            margin: $gifMargin;
+
+            text {
+                margin: $gifMargin;
+            }
         }
 
         /*
