@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/sketchy/bootstrap.min.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <script src="https://kit.fontawesome.com/87baf7d682.js" crossorigin="anonymous"></script>
- 
+
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -18,41 +18,58 @@
 
 <body>
     <header>
- 
+
+        <div class="container">
+        
+
         <h1 class="col-4">Find My Gif</h1>
 
-         <input class="col-6" type="text" id="text-search" placeholder="Search..."
-        <span class="input-group-append col-2">
-            <button id="btn-search" class="btn btn-secondary">
-                <i class="fas fa-search" aria-hidden="true"></i>
-            </button>
+        <input class="col-6" type="text" id="text-search" placeholder="Search..." <span
+            class="input-group-append col-2">
+        <button id="btn-search" class="btn btn-secondary">
+            <i class="fas fa-search" aria-hidden="true"></i>
+        </button>
         </span>
-         <br>
+        <br>
 
-         <div id="category-bar" class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-secondary"><i class="fas fa-bars"></i>All</button>
-            <button type="button" class="btn btn-secondary">Trending</button>
- 
-          </div>
+        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Categories <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Popular Searches
+                        </a>
+                        <div id="trending-searches-dropdown" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"> </div>
+                    </li>
+                    <li class="nav-item">
+                        <a id="trending" class="nav-link" href="#">Trending</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="far fa-heart"></i>&nbsp;Favorites</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
         <hr>
     </header>
 
     <main>
         <div class="container">
-        <div id="search">
-           <select class="col-3 custom-select" id="category">
-                <option value="0" selected>trending</option>
-                <option value="1">hello</option>
-                <option value="2">congratulations</option>
-                <option value="3">excited</option>
-                <option value="4">bye</option>
-            </select>
+ 
+            <div id="gif-gallery" class="row"></div>
+
         </div>
 
-        <div id="gif-gallery" class="row"></div>
-
-    </div>
- 
     </main>
 
 

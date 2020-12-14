@@ -6,24 +6,66 @@ $(function () {
     var loadingOffset = 0;
     var loadingLimit = 25;  // Currently this is unchanged.  May add to an option at some point.  
 
-   var heart = '<div class="overlay"><i class="far fa-heart"/></div>';
+    /* far - outline heart; fas - solid heart */
+    var heart = '<div class="overlay"><i class="far fa-heart"/></div>';
+    var air = '<i class="fas fa-air-freshener fresh"></i>';
 
-   var air = '<i class="fas fa-air-freshener fresh"></i>';
+    //collectCategories();
 
-    
-        
-    collectCategories();
+
 
     collectTrendingGifs();
+
+    collectTrendingSearches();
+
+    //----
+    // Search Gifs using the search criteria from the search input.  
+    //----
+    $('#text-search').change(function () {
+        var jEdit = $(this);
+
+        var strSearch = jEdit.val().trim();
+        if (strSearch.length > 0) {
+            searchGifs(strSearch);
+        }
+    });
+
+    //----
+    // Search Gifs using the search criteria from the search input.
+    //----
+    $('#btn-search').click(function () {
+        var jEdit = $('#text-search');
+
+        var strSearch = jEdit.val().trim();
+        if (strSearch.length > 0) {
+            searchGifs(strSearch);
+        }
+    });
+
+    $('#trending').click(function () {
+        // Reset variables and current collections.  
+        loadingOffset = 0;
+        $('#gif-gallery').empty();
+
+        collectTrendingGifs();
+    });
+
+    $('#trending-searches-dropdown').on('click', '.mnu-search', function () {
+        //-- Note exactly clear why this comes back as an array.  I thought this would be the button.  
+        var jBtn = $(this)[0];
+
+        searchGifs(jBtn.innerText);
+    });
+
 
     //----
     // Category dropdown - this should go away
     //----
-     $('#category').change(function () {
+    $('#category').change(function () {
         var jSelect = $(this);
 
         var index = jSelect.val();
-        
+
         if (index === currentCategory)
             return;
 
@@ -49,32 +91,21 @@ $(function () {
     //----
     // The 'more' button was clicked.  This might be best with an id.  
     //----
-    $('#gif-gallery').on('click', "button", function() {
+    $('#gif-gallery').on('click', "button", function () {
         if (currentCategory == 0)
             collectTrendingGifs(loadingOffset);
         else
             collectSearchGifs(currentSearch, loadingOffset);
     });
 
-    //----
-    // Remove the more button
-    //----
-    function removeLoadMoreButton() {
-        $('#more').remove();
-    };
 
-    //----
-    // Append the more button to the list of gifs
-    function addLoadMoreButton() {
-        $('#gif-gallery').append('<button type="button" id="more" class="btn btn-Primary hoverable">Load More...</button>');
-    };
-    
 
-   
+
+
     //----
     // When the user mouses into the image, show the overlays (heart, copy link)
     //----
-    $('#gif-gallery').on('mouseenter', '.div-gif', function() {
+    $('#gif-gallery').on('mouseenter', '.div-gif', function () {
         var jDiv = $(this);
 
         var jOverlay = jDiv.find('.overlay');
@@ -85,7 +116,7 @@ $(function () {
     //----
     // When the user leaves the image, remove the overlay.  
     //----
-    $('#gif-gallery').on('mouseleave', '.div-gif', function() {
+    $('#gif-gallery').on('mouseleave', '.div-gif', function () {
         var jDiv = $(this);
 
         var jOverlay = jDiv.find('.overlay');
@@ -97,7 +128,7 @@ $(function () {
     //----
     // User action:  clicking on a heart to 'love' a gif. 
     //---- 
-    $('#gif-gallery').on('click', '.far.fa-heart', function() {
+    $('#gif-gallery').on('click', '.far.fa-heart', function () {
         var jImage = $(this);
 
         jImage.removeClass('far');
@@ -114,12 +145,36 @@ $(function () {
     //----
     // User action:  clicking a 'loved' heart to unlove the gif. 
     //----
-    $('#gif-gallery').on('click', '.fas.fa-heart', function() {
+    $('#gif-gallery').on('click', '.fas.fa-heart', function () {
         var jImage = $(this);
 
         jImage.removeClass('fas loved');
         jImage.addClass('far');
     });
+
+    //----
+    // Search gifs using the supplied search string
+    function searchGifs(strSearch) {
+
+        // Reset variables and current collections.  
+        loadingOffset = 0;
+        $('#gif-gallery').empty();
+
+        collectSearchGifs(strSearch);
+    }
+
+    //----
+    // Remove the more button
+    //----
+    function removeLoadMoreButton() {
+        $('#more').remove();
+    };
+
+    //----
+    // Append the more button to the list of gifs
+    function addLoadMoreButton() {
+        $('#gif-gallery').append('<button type="button" id="more" class="btn btn-Primary hoverable">Load More...</button>');
+    };
 
 
     //-------------------------------------------------------------------------------------------------------------
@@ -137,8 +192,8 @@ $(function () {
             url,
             (data) => {
 
-               // Remove the button should it exist.  
-               removeLoadMoreButton();
+                // Remove the button should it exist.  
+                removeLoadMoreButton();
 
                 // The data parameter contains the string
                 $(data.data).each(function (index, element) {
@@ -146,7 +201,7 @@ $(function () {
                     var altText = element.title;
                     $('#gif-gallery').append(`<div class="div-gif"><img src="${url}" alt="${altText}" />${air}${heart}</div>`);
                 })
- 
+
                 addLoadMoreButton();
 
                 loadingOffset += data.pagination.count;
@@ -162,7 +217,7 @@ $(function () {
         $.get(
             url,
             (data) => {
-                
+
                 // Remove the button should it exist.  
                 removeLoadMoreButton();
 
@@ -183,21 +238,22 @@ $(function () {
     //----
     // Collects the trending searches
     //----
-    function collectCategories() {
+    function collectTrendingSearches() {
         $.get(
             //'https://api.giphy.com/v1/gifs/categories?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
             'https://api.giphy.com/v1/trending/searches?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
             (data) => {
 
-                for (var x=0; x < 12; x++) {
-                    $('#category-bar').append(`<button type="button" class="btn btn-secondary">${data.data[x]}</button>`);
-                }
+                //               for (var x = 0; x < 12; x++) {
+                $(data.data).each(function (index, element) {
+                    $('#trending-searches-dropdown').append(`<button type="button" class="mnu-search dropdown-item">${element}</button>`);
+                })
             }
         );
     };
 
- 
- 
+
+
 
 
 })
