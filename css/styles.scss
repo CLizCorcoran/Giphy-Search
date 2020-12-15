@@ -1,14 +1,55 @@
+@import "normalize";
+
+
+/***************************
+****************************
+Reset
+****************************
+***************************/
+
+/* Change all elements to use border-box */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+
+
 $brandPadding: 12px;
-$gifMargin: 6px;
+$gifMargin: 20px;
+$gifMarginHalf: $gifMargin / 2;
 
 @mixin standardPadding($value) {
     padding: $value;
 }
 
 h1 {
-    display: inline;
-    margin-right: 20px;
+     margin-right: 20px;
+     margin-top: 0px;
+     margin-bottom: 0px;
+     min-width: 150px;
 }
+
+#search-div {
+    display: flex;
+    width: auto;
+}
+
+nav {
+ 
+}
+
+h1, h2, h3 {
+    font-weight: bold;
+  }
+  a {
+    font-weight: bold;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
 
 @media (min-width: 1200px) {
 
@@ -25,11 +66,15 @@ h1 {
 body {
     @include standardPadding($brandPadding);
 
+    #page h4 {
+        text-align: center;
+    }
+
     #gif-gallery {
         padding: $brandPadding 0px;
 
         img {
-            margin: $gifMargin;
+ 
             z-index: -1;
         }
 
@@ -42,7 +87,16 @@ body {
         .div-gif {
             position: relative;
             height: fit-content;
+            margin: $gifMargin $gifMarginHalf;
+            
+
         }
+
+        .div-gif:hover {
+            box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        
 
         .div-cat {
             border-style: solid;
@@ -53,6 +107,11 @@ body {
                 margin: $gifMargin;
             }
         }
+
+        .div-cat:hover {
+            box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
 
         /*
         .overlay:hover {

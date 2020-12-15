@@ -1,15 +1,25 @@
 // DOM is ready function
 $(function () {
 
+    var categoryInfo = null;
+    var categoryBreadcrumb = [];
     var currentCategory = 0;
     var currentSearch = '';
     var loadingOffset = 0;
     var loadingLimit = 25;  // Currently this is unchanged.  May add to an option at some point.  
 
+    var layoutInfo = {
+        heights: [0, 0, 0, 0],
+        heightAverage: 0,
+        colIdx: 0
+    }
+    let average = (array) => array.reduce((a, b) => a + b) / array.length;
+
     /* far - outline heart; fas - solid heart */
     var heart = '<div class="overlay"><i class="far fa-heart"/></div>';
     var air = '<i class="fas fa-air-freshener fresh"></i>';
 
+    initGallery();
     collectTrendingGifs();
 
     collectTrendingSearches();
@@ -22,6 +32,7 @@ $(function () {
 
         var strSearch = jEdit.val().trim();
         if (strSearch.length > 0) {
+            $('#page-title')[0].innerText = "Search Results:  " + strSearch;
             searchGifs(strSearch);
         }
     });
@@ -34,21 +45,25 @@ $(function () {
 
         var strSearch = jEdit.val().trim();
         if (strSearch.length > 0) {
+            $('#page-title')[0].innerText = "Search Results:  " + strSearch;
             searchGifs(strSearch);
         }
     });
 
     $('#categories').click(function() {
-        loadingOffset = 0;
-        $('#gif-gallery').empty();
+        // Reset variables and current collections.  
+        initGallery(); 
+        $('#text-search')[0].value = '';
+        $('#page-title')[0].innerText = "Categories";
 
         collectCategories();
     })
 
     $('#trending').click(function () {
         // Reset variables and current collections.  
-        loadingOffset = 0;
-        $('#gif-gallery').empty();
+         initGallery(); 
+         $('#text-search')[0].value = '';
+         $('#page-title')[0].innerText = "Trending";
 
         collectTrendingGifs();
     });
@@ -56,8 +71,13 @@ $(function () {
     $('#trending-searches-dropdown').on('click', '.mnu-search', function () {
         //-- Note exactly clear why this comes back as an array.  I thought this would be the button.  
         var jBtn = $(this)[0];
+        $('#page-title')[0].innerText = "Search Results:  " + jBtn.innerText;
 
         searchGifs(jBtn.innerText);
+    });
+
+    $('#gif-gallery').on('click', '#div-cat', function() {
+        
     });
 
 
@@ -160,8 +180,7 @@ $(function () {
     function searchGifs(strSearch) {
 
         // Reset variables and current collections.  
-        loadingOffset = 0;
-        $('#gif-gallery').empty();
+        initGallery(); 
 
         collectSearchGifs(strSearch);
     }
@@ -176,8 +195,57 @@ $(function () {
     //----
     // Append the more button to the list of gifs
     function addLoadMoreButton() {
-        $('#gif-gallery').append('<button type="button" id="more" class="btn btn-Primary hoverable">Load More...</button>');
+        var id = getLayoutID();
+        $(`#gif-gallery > #${id}`).append('<button type="button" id="more" class="btn btn-Primary hoverable">Load More...</button>');
     };
+
+
+    //----
+    // Init the gallery to a clean state
+    //----
+    function initGallery() {
+
+        $('#gif-gallery').empty();
+
+        $('#gif-gallery').append(`<div id="gallery-0" class="column"></div>`);
+        $('#gif-gallery').append(`<div id="gallery-1" class="column"></div>`);
+        $('#gif-gallery').append(`<div id="gallery-2" class="column"></div>`);
+        $('#gif-gallery').append(`<div id="gallery-3" class="column"></div>`);
+
+        loadingOffset = 0;
+        clearLayout();
+    }
+
+    function clearLayout() {
+        layoutInfo.heights = [0, 0, 0, 0];
+        layoutInfo.heightAverage = 0;
+        colIdx = 0;
+    };
+
+
+    function addColumnContent(height) {
+        layoutInfo.heights[layoutInfo.colIdx] += height;
+
+        var origColIdx = layoutInfo.colIdx;
+
+        layoutInfo.colIdx++;
+        if (layoutInfo.colIdx > 3) {
+            layoutInfo.colIdx = 0;
+            averageHeights = average(layoutInfo.heights);
+        }
+
+        while ((layoutInfo.heights[layoutInfo.colIdx] > layoutInfo.averageHeights) && layoutInfo.colIdx != origColIdx) {
+            layoutInfo.colIdx++;
+            if (layoutInfo.colIdx > 3) {
+                layoutInfo.colIdx = 0;
+                layoutInfo.averageHeights = average(layoutInfo.heights);
+            }
+        }     
+    };
+
+    function getLayoutID() {
+        return 'gallery-' + layoutInfo.colIdx;
+    }
 
 
     //-------------------------------------------------------------------------------------------------------------
@@ -190,6 +258,7 @@ $(function () {
     // Collects and displays the trending gifs.
     //----
     function collectTrendingGifs(offset = 0) {
+ 
         var url = 'https://api.giphy.com/v1/gifs/trending?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&limit=' + loadingLimit + '&offset=' + loadingOffset + '&rating=g';
         $.get(
             url,
@@ -200,17 +269,25 @@ $(function () {
 
                 // The data parameter contains the string
                 $(data.data).each(function (index, element) {
+
+                    var id = getLayoutID();
+                      
                     var url = element.images.fixed_width.url;
                     var altText = element.title;
-                    $('#gif-gallery').append(`<div class="div-gif"><img src="${url}" alt="${altText}" />${air}${heart}</div>`);
-                })
+                    $(`#gif-gallery > #${id}`).append(`<div class="div-gif"><img src="${url}" alt="${altText}" />${air}${heart}</div>`);
+
+                    addColumnContent(element.images.fixed_width.height);
+                
+
+                });
 
                 addLoadMoreButton();
 
                 loadingOffset += data.pagination.count;
-            }
-        );
+
+            });
     };
+  
 
     //----
     // Collects and displays gifs returned by the search string.  
@@ -226,9 +303,13 @@ $(function () {
 
                 // The data parameter contains the string
                 $(data.data).each(function (index, element) {
+                    var id = getLayoutID();
+
                     var url = element.images.fixed_width.url;
                     var altText = element.title;
-                    $('#gif-gallery').append(`<div class="div-gif"><img src="${url}" alt="${altText}"/></div>`);
+                    $(`#gif-gallery > #${id}`).append(`<div class="div-gif"><img src="${url}" alt="${altText}"/></div>`);
+
+                    addColumnContent(element.images.fixed_width.height);
                 })
 
                 addLoadMoreButton();
@@ -265,11 +346,20 @@ $(function () {
             'https://api.giphy.com/v1/gifs/categories?api_key=pI4DzZvYGmr4Gl941TDrtfkXV8SyhaJZ&q=',
             (data) => {
 
+                categoryInfo = data.data;
+                var divID = 0;
+
                 $(data.data).each(function (index, element) {
-                    var url = element.gif.images.fixed_height.url;
+                    var id = getLayoutID();
+                  
+                    var url = element.gif.images.fixed_width.url;
                     var altText = element.name;
-                    $('#gif-gallery').append(`<div class="div-cat"><text>${element.name}</text><br/><img src="${url}" alt="${altText}"/></div>`);
+                    $(`#gif-gallery > #${id}`).append(`<div class="div-cat" id="${divID}"><text>${element.name}</text><br/><img src="${url}" alt="${altText}"/></div>`);
                     //$('#categories-dropdown').append(`<button type="button" class="mnu-search dropdown-item">${element.name}</button>`);
+
+                    divID++;
+
+                    addColumnContent(element.gif.images.fixed_width.height);
                 })
             }
         )

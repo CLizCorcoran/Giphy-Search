@@ -21,18 +21,20 @@
 
         <div class="container">
 
-
-            <h1 class="col-4">Find My Gif</h1>
-
-
-            <input class="col-6" type="text" id="text-search" placeholder="Search..." <span
-                class="input-group-append col-2">
-            <button id="btn-search" class="btn btn-secondary">
-                <i class="fas fa-search" aria-hidden="true"></i>
-            </button>
-            </span>
-
-            <br>
+ 
+            <div id="search-div">
+                <h1>Find My Gif</h1>
+ 
+                <input class="w-75" type="text" id="text-search" placeholder="Search..." area-label="Search">
+  
+                <button id="btn-search" class="btn btn-secondary">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </button>                
+            
+        
+    </div>
+ 
+            <br style="clear: both;">
 
             <nav class="navbar navbar-expand-sm navbar-light bg-light">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
@@ -53,7 +55,7 @@
                                 aria-labelledby="navbarDropdownMenuLink"> </div>
                         </li>
                         <li class="nav-item">
-                            <a id="trending" class="nav-link"  active href="#">Trending</a>
+                            <a id="trending" class="nav-link active" href="#">Trending</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#"><i class="far fa-heart"></i>&nbsp;Favorites</a>
@@ -69,7 +71,12 @@
     <main>
         <div class="container">
 
-            <div id="gif-gallery" class="row"></div>
+            <div id="page" class="justify-content-center">
+                <h4 id="page-title">Trending</h4>
+
+                <div id="gif-gallery" class="row justify-content-center"></div>
+
+            </div>
 
         </div>
 
