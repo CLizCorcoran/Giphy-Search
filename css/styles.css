@@ -387,7 +387,8 @@ h1 {
   width: auto; }
 
 h1, h2, h3 {
-  font-weight: bold; }
+  font-weight: bold;
+  white-space: nowrap; }
 
 a {
   font-weight: bold; }
@@ -397,10 +398,26 @@ a:hover {
 
 @media (min-width: 1200px) {
   .container {
-    max-width: 1300; } }
+    max-width: 1300; }
+  #gif-gallery {
+    flex-wrap: nowrap; } }
+
+@media (min-width: 750px) {
+  #gif-gallery {
+    flex-wrap: nowrap; } }
+
+.hide {
+  display: none; }
 
 #category-bar {
   width: 100%; }
+
+#text-search {
+  width: 100%; }
+
+#more {
+  margin: auto;
+  display: block; }
 
 body {
   padding: 12px; }
@@ -423,14 +440,15 @@ body {
       z-index: -1; }
     body #gif-gallery #more {
       height: 112px;
-      width: 200px;
-      margin: 20px; }
+      width: 200px; }
     body #gif-gallery .div-gif {
       position: relative;
       height: fit-content;
       margin: 20px 10px; }
     body #gif-gallery .div-gif:hover {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+    body #gif-gallery .div-gif:hover > .hide {
+      display: inline; }
     body #gif-gallery .div-cat {
       border-style: solid;
       border-width: 1px;
@@ -443,10 +461,8 @@ body {
       position: absolute;
       top: 0;
       right: 0;
-      background: black;
       background: rgba(0, 0, 0, 0.5);
       /* Black see-through */
-      opacity: 0;
       transition: .5s ease;
       color: white;
       font-size: 20px;
@@ -454,12 +470,40 @@ body {
       z-index: 1; }
     body #gif-gallery .fas.fa-heart {
       color: red; }
+    body #gif-gallery .fa-link {
+      padding-right: 12px; }
     body #gif-gallery .fresh {
       position: absolute;
       top: 0;
       right: 0;
-      color: green;
+      background: transparent;
       font-size: 20px;
       padding: 6px;
       z-index: 2;
       display: none; }
+    body #gif-gallery .loved > .fresh {
+      display: inline; }
+    body #gif-gallery .favoriteheart {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: white;
+      border-radius: 50%;
+      color: red;
+      margin: 2px;
+      font-size: 20px;
+      padding: 6px;
+      z-index: 1; }
+  body #copylink {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 2em;
+    height: 2em;
+    padding: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    display: none; }

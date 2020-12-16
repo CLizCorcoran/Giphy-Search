@@ -43,6 +43,7 @@ nav {
 
 h1, h2, h3 {
     font-weight: bold;
+    white-space: nowrap;
   }
   a {
     font-weight: bold;
@@ -56,11 +57,34 @@ h1, h2, h3 {
     .container {
          max-width: 1300;
     }
+
+    #gif-gallery {
+        flex-wrap: nowrap;
+    }
+}
+
+@media (min-width: 750px) {
+    #gif-gallery {
+        flex-wrap: nowrap;
+    }
+}
+
+.hide {
+    display: none;
 }
 
 
 #category-bar {
     width: 100%;
+}
+
+#text-search {
+    width: 100%;
+}
+
+#more {
+    margin: auto;
+    display: block;
 }
 
 body {
@@ -91,7 +115,6 @@ body {
         #more {
             height: 112px;
             width: 200px;
-            margin: $gifMargin;
         }
 
         .div-gif {
@@ -106,7 +129,9 @@ body {
             box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
 
-        
+        .div-gif:hover > .hide {
+            display: inline;
+        }
 
         .div-cat {
             border-style: solid;
@@ -135,31 +160,81 @@ body {
             position: absolute;
             top: 0;
             right: 0;
-            background: rgb(0, 0, 0);
+            //background: rgb(0, 0, 0);
             background: rgba(0, 0, 0, 0.5); /* Black see-through */
-            opacity: 0;
+            //opacity: 0;
             transition: .5s ease;
             color: white;
             font-size: 20px;
             padding: 6px;
             z-index: 1;
-        }
+         }
 
         .fas.fa-heart {
             color: red;
        
         }
 
+        .fa-link {
+            padding-right: 12px;
+        }
+
         .fresh {
             position: absolute;
             top: 0;
             right: 0;
-             color: green;
+            background: transparent;
+            // color: green;
             font-size: 20px;
             padding: 6px;
             z-index: 2;
             display: none;
         }
+
+        .loved > .fresh {
+            display: inline;
+        }
+
+        .favoriteheart {
+            position: absolute;
+            top: 0;
+            right: 0;
+            //background: rgb(0, 0, 0);
+            background:white;
+            border-radius: 50%;
+            //opacity: 0;
+             color: red;
+             margin: 2px;
+            font-size: 20px;
+            padding: 6px;
+            z-index: 1;
+        }
+    }
+
+    #copylink {
+        position: fixed;
+        top: 0;
+        left: 0;
+     
+        // Ensure it has a small width and height. Setting to 1px / 1em
+        // doesn't work as this gives a negative w/h on some browsers.
+        width: 2em;
+        height: 2em;
+ 
+      
+        // We don't need padding, reducing the size if it does flash render.
+        padding: 0;
+        padding: 0;
+        
+        // Clean up any borders.
+        border: none;
+        outline: none;
+        box-shadow: none;
+       
+        // Avoid flash of the white box if rendered for any reason.
+        background: transparent;
+
+        display: none;
     }
 }
 
