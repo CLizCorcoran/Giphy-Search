@@ -404,8 +404,14 @@ a:hover {
 
 body {
   padding: 12px; }
-  body #page h4 {
+  body #page-title {
     text-align: center; }
+  body #subcategories {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 40px; }
+    body #subcategories .subcategory {
+      margin: 6px; }
   body #gif-gallery {
     padding: 12px 0px;
     /*
@@ -435,8 +441,8 @@ body {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
     body #gif-gallery .overlay {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 0;
+      right: 0;
       background: black;
       background: rgba(0, 0, 0, 0.5);
       /* Black see-through */
@@ -444,16 +450,16 @@ body {
       transition: .5s ease;
       color: white;
       font-size: 20px;
-      padding: 20px;
+      padding: 6px;
       z-index: 1; }
-    body #gif-gallery .loved {
+    body #gif-gallery .fas.fa-heart {
       color: red; }
     body #gif-gallery .fresh {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 0;
+      right: 0;
       color: green;
       font-size: 20px;
-      padding: 20px;
+      padding: 6px;
       z-index: 2;
       display: none; }

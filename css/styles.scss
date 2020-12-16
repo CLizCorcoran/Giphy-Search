@@ -66,8 +66,18 @@ h1, h2, h3 {
 body {
     @include standardPadding($brandPadding);
 
-    #page h4 {
+    #page-title {
         text-align: center;
+    }
+
+    #subcategories {
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 40px;
+
+        .subcategory {
+            margin: 6px;
+        }
     }
 
     #gif-gallery {
@@ -112,6 +122,8 @@ body {
             box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
 
+ 
+
 
         /*
         .overlay:hover {
@@ -121,30 +133,30 @@ body {
 
         .overlay {
             position: absolute;
-            top: $gifMargin;
-            right: $gifMargin;
+            top: 0;
+            right: 0;
             background: rgb(0, 0, 0);
             background: rgba(0, 0, 0, 0.5); /* Black see-through */
             opacity: 0;
             transition: .5s ease;
             color: white;
             font-size: 20px;
-            padding: $gifMargin;
+            padding: 6px;
             z-index: 1;
         }
 
-        .loved {
+        .fas.fa-heart {
             color: red;
        
         }
 
         .fresh {
             position: absolute;
-            top: $gifMargin;
-            right: $gifMargin;
+            top: 0;
+            right: 0;
              color: green;
             font-size: 20px;
-            padding: $gifMargin;
+            padding: 6px;
             z-index: 2;
             display: none;
         }

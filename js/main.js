@@ -6,7 +6,10 @@ $(function () {
     var currentCategory = 0;
     var currentSearch = '';
     var loadingOffset = 0;
-    var loadingLimit = 25;  // Currently this is unchanged.  May add to an option at some point.  
+    var loadingLimit = 25;  // Currently this is unchanged.  May add to an option at some point. 
+    var favorites = []; 
+    let findFavorite = (id) => favorites.find(o => o.id === id);
+    let findFavoriteIndex = (id) => favorites.findIndex(o => o.id === id);
 
     var layoutInfo = {
         heights: [0, 0, 0, 0],
@@ -17,7 +20,11 @@ $(function () {
 
     /* far - outline heart; fas - solid heart */
     var heart = '<div class="overlay"><i class="far fa-heart"/></div>';
+    var emptyHeartDiv = '<div class="overlay"><i class="far fa-heart"/></div>'
+    var solidHeartDiv = '<div class="overlay"><i class="fas fa-heart"/></div>';
     var air = '<i class="fas fa-air-freshener fresh"></i>';
+
+    var subcategoryBar = '<div id="subcategories" class="btn-group btn-group-sm" role="group" aria-label="Basic example"><div>';
 
     initGallery();
     collectTrendingGifs();
@@ -76,9 +83,109 @@ $(function () {
         searchGifs(jBtn.innerText);
     });
 
-    $('#gif-gallery').on('click', '#div-cat', function() {
+
+    //----
+    // A category was selected.  Show the gifs for the category plus its subcategories.  
+    //----
+    $('#gif-gallery').on('click', '.div-cat', function() {
+        var jCat = $(this);
+
+        var idx = jCat.prop('id');
+
+        initGallery(); 
+
+        $('#page-title')[0].innerText = "Category: " + categoryInfo[idx].name;
+
+        $('#page-title').after(subcategoryBar);
+
+        $('#subcategories').append(`<button type="button" class="btn btn-secondary subcategory active">All ${categoryInfo[idx].name}</button>`);
+        $(categoryInfo[idx].subcategories).each( function( index, element) {
+            $('#subcategories').append(`<button type="button" class="btn btn-secondary subcategory">${element.name}</button>`);
+        });
+
+        collectSearchGifs(categoryInfo[idx].name);
+
         
+
+
+
+/*
+        var divID = 0;
+
+        $(categoryInfo[idx].subcategory).each(function (index, element) {
+            var id = getLayoutID();
+          
+            var url = element.gif.images.fixed_width.url;
+            var altText = element.name;
+            $(`#gif-gallery > #${id}`).append(`<div class="div-cat" id="${divID}"><text>${element.name}</text><br/><img src="${url}" alt="${altText}"/></div>`);
+            //$('#categories-dropdown').append(`<button type="button" class="mnu-search dropdown-item">${element.name}</button>`);
+
+            divID++;
+
+            addColumnContent(element.gif.images.fixed_width.height);
+        })
+*/
     });
+
+    //---
+    // A subcategory was selected
+    //---
+    $('#page').on('click', '.subcategory', function() {
+        var jSub = $(this);
+        var jActive = $('.active');
+
+        // If the active button was pressed, move along.  
+        if (jActive === jSub )
+            return;
+
+        // Make this subcategory active now.  
+        jActive.removeClass('active');
+        jSub.addClass('active');
+
+        //$('#page-title')[0].innerHTML += `<br/>Subcategory:  ${jSub[0].innerText}`;
+
+        initGallery(false);
+
+        collectSearchGifs(jSub[0].innerText);
+
+
+    })
+
+
+    //----
+    // Favorites
+    //----
+    $('#favorites').click( function() {
+               // Reset variables and current collections.  
+               initGallery(); 
+               $('#text-search')[0].value = '';
+               $('#page-title')[0].innerHTML = `<i class="fas fa-heart"></i>&nbsp;Favorites`;
+
+
+               favorites.forEach( element => {
+
+                var id = getLayoutID();
+                  
+                var url = element;
+                //var altText = element.title;
+                $(`#gif-gallery > #${id}`).append(`<div class="div-gif"><img id="${element.id}" src="${element.url}" />${air}${heart}</div>`);
+
+                addColumnContent(element.height);
+            
+
+            });
+    });
+
+    function addFavorite( id, url, height) {
+        var favorite = { id: id, url: url, height: height };
+
+        favorites.push(favorite);
+    }
+
+    function removeFavorite( id ) {
+        var idx = findFavoriteIndex( id );
+        favorites.splice(idx, 1);
+    }
 
 
     //----
@@ -149,7 +256,7 @@ $(function () {
 
 
     //----
-    // User action:  clicking on a heart to 'love' a gif. 
+    // Love User action:  clicking on a heart to 'love' a gif. 
     //---- 
     $('#gif-gallery').on('click', '.far.fa-heart', function () {
         var jImage = $(this);
@@ -157,22 +264,41 @@ $(function () {
         jImage.removeClass('far');
         jImage.addClass('fas loved');
 
+        //var jGif = jImage.prev("img");
+
         // Now we need to move the heart out of the overlay div and on top of the image.
         var jGifDiv = jImage.parents('.div-gif');
         var jHeart = jImage.find('.fresh');
         jHeart.show();
 
+        jGif = jGifDiv.find('img');
+
+        addFavorite( jGif[0].id, jGif[0].src, jGif[0].fwHeight);
+
+        // Add information to favorites array.  
+        //favorites.push(jGif[0].src);
+
     });
 
-
+ 
     //----
-    // User action:  clicking a 'loved' heart to unlove the gif. 
+    // Unlove User action:  clicking a 'loved' heart to unlove the gif. 
     //----
     $('#gif-gallery').on('click', '.fas.fa-heart', function () {
         var jImage = $(this);
 
         jImage.removeClass('fas loved');
         jImage.addClass('far');
+
+        var jGifDiv = jImage.parents('.div-gif');
+        var jGif = jGifDiv.find('img');
+
+        removeFavorite(jGif[0].id);
+
+        //var idx;
+
+        //favorites.indexOf(jGif[0].url);
+        //favorites.splice(idx, 1);
     });
 
     //----
@@ -203,7 +329,10 @@ $(function () {
     //----
     // Init the gallery to a clean state
     //----
-    function initGallery() {
+    function initGallery(removeSubcategories = true) {
+
+        if (removeSubcategories)
+            $('#subcategories').remove();
 
         $('#gif-gallery').empty();
 
@@ -219,7 +348,7 @@ $(function () {
     function clearLayout() {
         layoutInfo.heights = [0, 0, 0, 0];
         layoutInfo.heightAverage = 0;
-        colIdx = 0;
+        layoutInfo.colIdx = 0;
     };
 
 
@@ -274,9 +403,12 @@ $(function () {
                       
                     var url = element.images.fixed_width.url;
                     var altText = element.title;
-                    $(`#gif-gallery > #${id}`).append(`<div class="div-gif"><img src="${url}" alt="${altText}" />${air}${heart}</div>`);
+                    var height = element.images.fixed_width.height;
+                    var isFavorite = findFavorite(element.id);
+                    var heartDiv = isFavorite ? solidHeartDiv : emptyHeartDiv;
+                    $(`#gif-gallery > #${id}`).append(`<div class="div-gif"><img id="${element.id}" fwHeight="${height}" src="${url}" alt="${altText}" />${air}${heartDiv}</div>`);
 
-                    addColumnContent(element.images.fixed_width.height);
+                    addColumnContent(height);
                 
 
                 });
