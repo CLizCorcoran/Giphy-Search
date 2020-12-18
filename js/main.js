@@ -1,3 +1,9 @@
+import '../css/styles.scss';
+import $ from 'jquery';
+import 'bootstrap/dist/css/bootstrap_sketchy.min.css';
+import 'bootstrap';
+import '../index.html';
+
 // DOM is ready function
 $(function () {
 
@@ -231,7 +237,7 @@ $(function () {
         var jImage = $(this);
 
         var jGifDiv = jImage.parents('.div-gif');
-        jGif = jGifDiv.find('img');
+        var jGif = jGifDiv.find('img');
 
         // Found this on StackOverflow - creates an input to put the to be copied text in.
         //  Selects it and copies it.  Just assuming the copy works.  :)
@@ -280,8 +286,8 @@ $(function () {
         //var jHeart = jImage.find('.fresh');
         //jHeart.show();
 
-        jGif = jGifDiv.find('img');
-        gifHeight = jGif.attr('fwheight');
+        var jGif = jGifDiv.find('img');
+        var gifHeight = jGif.attr('fwheight');
 
         addFavorite(jGif[0].id, jGif[0].src, gifHeight);
 

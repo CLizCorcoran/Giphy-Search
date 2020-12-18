@@ -1,6 +1,3 @@
-@import "normalize";
-
-
 /***************************
 ****************************
 Reset
@@ -29,7 +26,6 @@ h1 {
      margin-right: 20px;
      margin-top: 0px;
      margin-bottom: 0px;
-     min-width: 150px;
 }
 
 #search-div {
@@ -37,10 +33,7 @@ h1 {
     width: auto;
 }
 
-nav {
  
-}
-
 h1, h2, h3 {
     font-weight: bold;
     white-space: nowrap;

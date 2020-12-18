@@ -1,0 +1,38 @@
+{
+  "name": "giphy-search",
+  "version": "1.0.0",
+  "description": "Giph search webapp",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CLizCorcoran/Giphy-Search.git"
+  },
+  "author": "Christie Corcoran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CLizCorcoran/Giphy-Search/issues"
+  },
+  "homepage": "https://github.com/CLizCorcoran/Giphy-Search",
+  "devDependencies": {
+    "css-loader": "^5.0.1",
+    "file-loader": "^6.2.0",
+    "gh-pages": "^2.0.1",
+    "sass": "^1.30.0",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.1",
+    "bootstrap": "^4.5.3",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  }
+}
