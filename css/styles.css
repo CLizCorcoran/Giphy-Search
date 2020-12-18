@@ -421,6 +421,13 @@ a:hover {
 
 body {
   padding: 12px; }
+  body #copysuccess {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: .5s ease;
+    z-index: 1;
+    width: 100%; }
   body #page-title {
     text-align: center; }
   body #subcategories {

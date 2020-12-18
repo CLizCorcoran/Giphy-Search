@@ -2,9 +2,6 @@
 $(function () {
 
     var categoryInfo = null;
-    var categoryBreadcrumb = [];
-    var currentCategory = 0;
-    var currentSearch = '';
     var loadingOffset = 0;
     var loadingLimit = 25;  // Currently this is unchanged.  May add to an option at some point. 
     var favorites = [];
@@ -12,6 +9,7 @@ $(function () {
     let findFavoriteIndex = (id) => favorites.findIndex(o => o.id === id);
 
     var layoutInfo = {
+        currentSearch: '',
         heights: [0, 0, 0, 0],
         heightAverage: 0,
         colIdx: 0
@@ -20,7 +18,7 @@ $(function () {
 
     /* far - outline heart; fas - solid heart */
     var heart = '<div class="overlay"><i class="far fa-heart"/></div>';
-    var emptyHeartDiv = '<div class="overlay hide"><i class="fas fa-link"></i><i class="far fa-heart"/></div>'
+    var emptyHeartDiv = '<div class="overlay hide"><i class="fas fa-link hoverable"></i><i class="far fa-heart"/></div>'
     var solidHeartDiv = '<div class="overlay hide"><i class="fas fa-link"></i><i class="fas fa-heart"/></div>';
     //var air = '<i class="fas fa-air-freshener fresh"></i>';
     var air = '<i class="fas fa-heart fresh"></i>';
@@ -28,6 +26,8 @@ $(function () {
     
 
     var subcategoryBar = '<div id="subcategories" class="btn-group btn-group-sm" role="group" aria-label="Basic example"><div>';
+
+    var copySuccess = `<div id="copysuccess" class="alert alert-success"><strong>Success</strong> - link copied to clipboard!</div>`;
 
     initGallery();
     collectTrendingGifs();
@@ -65,6 +65,17 @@ $(function () {
     });
 
     $('#categories').click(function () {
+
+        // If trending is already active, bail out now.  
+        if ( $('#categories.active').length)
+            return;
+
+        // Find the active nav item.  
+        var jNavItem = $('.nav-link.active');
+        jNavItem.removeClass('active');
+        $('#categories').addClass('active');
+
+
         // Reset variables and current collections.  
         initGallery();
         $('#text-search')[0].value = '';
@@ -74,6 +85,16 @@ $(function () {
     })
 
     $('#trending').click(function () {
+
+        // If trending is already active, bail out now.  
+        if ( $('#trending.active').length)
+            return;
+
+        // Find the active nav item.  
+        var jNavItem = $('.nav-link.active');
+        jNavItem.removeClass('active');
+        $('#trending').addClass('active');
+
         // Reset variables and current collections.  
         initGallery();
         $('#text-search')[0].value = '';
@@ -83,6 +104,14 @@ $(function () {
     });
 
     $('#trending-searches-dropdown').on('click', '.mnu-search', function () {
+        
+        // Not going to worry about bailing early should the use select the same item twice.  
+
+        // Find the active nav item.  
+        var jNavItem = $('.nav-link.active');
+        jNavItem.removeClass('active');
+        $('#trending-searches').addClass('active');
+        
         //-- Note exactly clear why this comes back as an array.  I thought this would be the button.  
         var jBtn = $(this)[0];
         $('#page-title')[0].innerText = "Search Results:  " + jBtn.innerText;
@@ -112,26 +141,6 @@ $(function () {
 
         collectSearchGifs(categoryInfo[idx].name);
 
-
-
-
-
-        /*
-                var divID = 0;
-        
-                $(categoryInfo[idx].subcategory).each(function (index, element) {
-                    var id = getLayoutID();
-                  
-                    var url = element.gif.images.fixed_width.url;
-                    var altText = element.name;
-                    $(`#gif-gallery > #${id}`).append(`<div class="div-cat" id="${divID}"><text>${element.name}</text><br/><img src="${url}" alt="${altText}"/></div>`);
-                    //$('#categories-dropdown').append(`<button type="button" class="mnu-search dropdown-item">${element.name}</button>`);
-        
-                    divID++;
-        
-                    addColumnContent(element.gif.images.fixed_width.height);
-                })
-        */
     });
 
     //---
@@ -152,17 +161,25 @@ $(function () {
         //$('#page-title')[0].innerHTML += `<br/>Subcategory:  ${jSub[0].innerText}`;
 
         initGallery(false);
-
-        collectSearchGifs(jSub[0].innerText);
-
-
-    })
+        layoutInfo.currentSearch = jSub[0].innerText;   // The more button needs this info.  
+        collectSearchGifs(layoutInfo.currentSearch);
+    });
 
 
     //----
     // Favorites User
     //----
     $('#favorites').click(function () {
+
+        // If already in favorites, ignore the click.  
+        if ($('#favorites.active').length)
+            return;
+
+        // Find the active nav item.  
+        var jNavItem = $('.nav-link.active');
+        jNavItem.removeClass('active');
+        $('#favorites').addClass('active');
+
         // Reset variables and current collections.  
         initGallery();
         $('#text-search')[0].value = '';
@@ -195,44 +212,17 @@ $(function () {
     }
 
 
-    //----
-    // Category dropdown - this should go away
-    //----
-    $('#category').change(function () {
-        var jSelect = $(this);
-
-        var index = jSelect.val();
-
-        if (index === currentCategory)
-            return;
-
-        // keep track of the current category and reset loaded offset.  
-        currentCategory = index;
-        loadingOffset = 0;
-
-        // Empty the current collection
-        $('#gif-gallery').empty();
-
-        // Trending uses a slightly different API from search
-        if (index == 0)
-            collectTrendingGifs();
-
-        // If not trending, then search
-        else {
-            var jItem = jSelect.children().get(index);
-            currentSearch = jItem.text;
-            collectSearchGifs(currentSearch);
-        }
-    });
-
+ 
     //----
     // The 'more' button was clicked.  This might be best with an id.  
     //----
     $('#more').click( function () {
-        if (currentCategory == 0)
+
+        // Trending takes a different endpoint than all of the other searches. 
+        if ( $('#trending.active').length) 
             collectTrendingGifs(loadingOffset);
         else
-            collectSearchGifs(currentSearch, loadingOffset);
+            collectSearchGifs(layoutInfo.currentSearch, loadingOffset);
     });
 
 
@@ -240,83 +230,37 @@ $(function () {
 
         var jImage = $(this);
 
-
         var jGifDiv = jImage.parents('.div-gif');
         jGif = jGifDiv.find('img');
 
-        //jCopy = $('#copylink');
+        // Found this on StackOverflow - creates an input to put the to be copied text in.
+        //  Selects it and copies it.  Just assuming the copy works.  :)
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(jGif[0].src).select();
+        document.execCommand("copy");
+        $temp.remove();
 
-        //jCopy.val(jGif[0].src);
-        //jCopy[0].focus();
-
-        //jCopy[0].select();
-
-        //var successful = document.execCommand('copy');
-
-        
-            var $temp = $("<input>");
-            //$temp.attr('value', jGif[0].src);
-            $("body").append($temp);
-            $temp.val(jGif[0].src).select();
-            document.execCommand("copy");
-            $temp.remove();
-       
-/*
-        // copy the selection
-        var succeed;
-        try {
-            succeed = document.execCommand("copy");
-        } catch(e) {
-            succeed = false;
-        }
-*/
-        
-        //e.clipboardData = jGif[0].src;
- /*
-            textArea.value = text;
-          
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-          
-            try {
-              var successful = document.execCommand('copy');
-              var msg = successful ? 'successful' : 'unsuccessful';
-              console.log('Copying text command was ' + msg);
-            } catch (err) {
-              console.log('Oops, unable to copy');
-            }
-          
-            document.body.removeChild(textArea);
-          }
-
-          */
+        // If the info message has already been added to the dom, show it. 
+        //  Otherwise, create it.  
+        if ($('#copysuccess').length)
+            $('#copysuccess').show();
+        else
+            $('#main-container').prepend(copySuccess);
+  
     });
 
 
-    /*
-        //----
-        // When the user mouses into the image, show the overlays (heart, copy link)
-        //----
-        $('#gif-gallery').on('mouseenter', '.div-gif', function () {
-            var jDiv = $(this);
-    
-            var jOverlay = jDiv.find('.overlay');
-    
-            jOverlay.css('opacity', '1');
+ 
+    //----
+    // When the user leaves the image, remove any messages.  
+    //----
+    $('#gif-gallery').on('mouseleave', '.div-gif', function () {
+        var jMessage = $('#copysuccess');
+
+        if (jMessage.length)
+            jMessage.hide(500);
         });
-    
-        //----
-        // When the user leaves the image, remove the overlay.  
-        //----
-        $('#gif-gallery').on('mouseleave', '.div-gif', function () {
-            var jDiv = $(this);
-    
-            var jOverlay = jDiv.find('.overlay');
-    
-            jOverlay.css('opacity', '0');
-        });
-    */
 
 
     //----
@@ -374,6 +318,7 @@ $(function () {
 
         // Reset variables and current collections.  
         initGallery();
+        layoutInfo.currentSearch = strSearch;
 
         collectSearchGifs(strSearch);
     }
@@ -406,6 +351,8 @@ $(function () {
 
         $('#gif-gallery').empty();
 
+        removeLoadMoreButton();
+
         $('#gif-gallery').append(`<div id="gallery-0" class="column"></div>`);
         $('#gif-gallery').append(`<div id="gallery-1" class="column"></div>`);
         $('#gif-gallery').append(`<div id="gallery-2" class="column"></div>`);
@@ -416,6 +363,7 @@ $(function () {
     }
 
     function clearLayout() {
+        layoutInfo.strSearch = '';
         layoutInfo.heights = [0, 0, 0, 0];
         layoutInfo.heightAverage = 0;
         layoutInfo.colIdx = 0;
@@ -538,9 +486,10 @@ $(function () {
                      addColumnContent(element.images.fixed_width.height);
                 })
 
-                addLoadMoreButton();
-
                 loadingOffset += data.pagination.count;
+
+                if (loadingOffset < data.pagination.total_count)
+                    addLoadMoreButton();
             }
         );
     };

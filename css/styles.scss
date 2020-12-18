@@ -90,6 +90,15 @@ h1, h2, h3 {
 body {
     @include standardPadding($brandPadding);
 
+    #copysuccess {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transition: .5s ease;
+        z-index: 1;
+        width: 100%;
+     }
+
     #page-title {
         text-align: center;
     }
