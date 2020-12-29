@@ -239,11 +239,14 @@ $(function () {
         var jGifDiv = jImage.parents('.div-gif');
         var jGif = jGifDiv.find('img');
 
+        var link = jGif.attr("embedsrc");
+
         // Found this on StackOverflow - creates an input to put the to be copied text in.
         //  Selects it and copies it.  Just assuming the copy works.  :)
         var $temp = $("<input>");
         $("body").append($temp);
-        $temp.val(jGif[0].src).select();
+        //$temp.val(jGif[0].src).select();
+        $temp.val(link).select();
         document.execCommand("copy");
         $temp.remove();
 
@@ -439,7 +442,7 @@ $(function () {
                     var heartDiv = isFavorite ? solidHeartDiv : emptyHeartDiv;
                     var loved = isFavorite ? "loved" : "";
 
-                    $(`#gif-gallery > #${id}`).append(`<div class="div-gif ${loved}"><img id="${element.id}" fwheight="${height}" src="${url}" alt="${altText}" />${air}${heartDiv}</div>`);
+                    $(`#gif-gallery > #${id}`).append(`<div class="div-gif ${loved}"><img id="${element.id}" embedsrc="${element.embed_url}" fwheight="${height}" src="${url}" alt="${altText}" />${air}${heartDiv}</div>`);
 
                     addColumnContent(height);
 

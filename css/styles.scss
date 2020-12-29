@@ -31,6 +31,10 @@ h1 {
 #search-div {
     display: flex;
     width: auto;
+
+    button {
+        margin-bottom: .5rem;
+    }
 }
 
  
@@ -174,11 +178,15 @@ body {
 
         .fas.fa-heart {
             color: red;
-       
+        }
+
+        .fa-heart {
+            cursor: pointer;
         }
 
         .fa-link {
             padding-right: 12px;
+            cursor: pointer;
         }
 
         .fresh {
