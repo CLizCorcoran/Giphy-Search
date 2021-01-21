@@ -70,9 +70,14 @@ $(function () {
         }
     });
 
+
+    //----
+    // Categories menu item was clicked - this will render a 
+    //  list of categories with gifs representing the category.    
+    //----
     $('#categories').click(function () {
 
-        // If trending is already active, bail out now.  
+        // If categories is already active, bail out now.  
         if ( $('#categories.active').length)
             return;
 
@@ -90,6 +95,10 @@ $(function () {
         collectCategories();
     })
 
+
+    //----
+    // Tending menu item was clicked
+    //----
     $('#trending').click(function () {
 
         // If trending is already active, bail out now.  
@@ -109,6 +118,10 @@ $(function () {
         collectTrendingGifs();
     });
 
+
+    //----
+    // Popular searches dropped down and a popular/trending search was selected.
+    //----
     $('#trending-searches-dropdown').on('click', '.mnu-search', function () {
         
         // Not going to worry about bailing early should the use select the same item twice.  
@@ -232,6 +245,9 @@ $(function () {
     });
 
 
+    //----
+    // The copy button was pressed.  
+    //----
     $('#gif-gallery').on('click', '.fa-link', function(e) {
 
         var jImage = $(this);
@@ -336,17 +352,13 @@ $(function () {
     // Remove the more button
     //----
     function removeLoadMoreButton() {
-        //$('#more').remove();
-        $('#more').hide();
+          $('#more').hide();
     };
 
     //----
     // Append the more button to the list of gifs
     function addLoadMoreButton() {
-        //var id = getLayoutID();
-        //$(`#gif-gallery > #${id}`).append('<button type="button" id="more" class="btn btn-Primary hoverable">Load More...</button>');
-
-        $('#more').show();
+         $('#more').show();
     };
 
 
@@ -371,6 +383,9 @@ $(function () {
         clearLayout();
     }
 
+    //----
+    // Helper function to simply empty our the layoutstate struct
+    //----
     function clearLayout() {
         layoutInfo.strSearch = '';
         layoutInfo.heights = [0, 0, 0, 0];
@@ -378,34 +393,33 @@ $(function () {
         layoutInfo.colIdx = 0;
     };
 
-
+    //----
+    // Method to layout gifs into 4 columns.  Each column keeps track
+    //  of their height.  The next gif goes to the column with the shortest
+    //  height.  Wrapping happens when the 4 columns go down to 2 and then 
+    //  again to 1.  
+    //
+    // I played with this for way too long.  
+    //----
     function addColumnContent(height) {
         layoutInfo.heights[layoutInfo.colIdx] += Number(height);
 
         var origColIdx = layoutInfo.colIdx;
 
-        /*
-                layoutInfo.colIdx++;
-                if (layoutInfo.colIdx > 3) {
-                    layoutInfo.colIdx = 0;
-                    averageHeights = average(layoutInfo.heights);
-                }
-        */
-
-        //       while ((layoutInfo.heights[layoutInfo.colIdx] > layoutInfo.heightAverage) && layoutInfo.colIdx != origColIdx) {
         while ((layoutInfo.heights[layoutInfo.colIdx] > layoutInfo.heightAverage)) {
             layoutInfo.colIdx++;
             if (layoutInfo.colIdx > 3) {
                 layoutInfo.colIdx = 0;
-                //var sum = layoutInfo.heights.reduce((a, b) => a + b);
-                //layoutInfo.heightAverage = sum / layoutInfo.heights.length;
 
-                //let average = (array) => array.reduce((a, b) => a + b) / array.length;
-                layoutInfo.heightAverage = average(layoutInfo.heights);
+            layoutInfo.heightAverage = average(layoutInfo.heights);
             }
         }
     };
 
+    //----
+    // Helper method to return the id based on the current column
+    //  index.  
+    //----
     function getLayoutID() {
         return 'gallery-' + layoutInfo.colIdx;
     }
@@ -482,15 +496,6 @@ $(function () {
                     var loved = isFavorite ? "loved" : "";
 
                     $(`#gif-gallery > #${id}`).append(`<div class="div-gif ${loved}"><img id="${element.id}" fwheight="${height}"src="${url}" alt="${altText}"/>${air}${heartDiv}</div>`);
-
-/*
-                    var height = element.images.fixed_width.height;
-                    var isFavorite = findFavorite(element.id);
-                    var heartDiv = isFavorite ? solidHeartDiv : emptyHeartDiv;
- 
-
-                    $(`#gif-gallery > #${id}`).append(`<div class="div-gif ${loved}"><img id="${element.id}" fwheight="${height}" src="${url}" alt="${altText}" />${air}${heartDiv}</div>`);
-*/
 
                      addColumnContent(element.images.fixed_width.height);
                 })

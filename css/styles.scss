@@ -28,9 +28,21 @@ h1 {
      margin-bottom: 0px;
 }
 
+
+/***************************************************************/
+/*                                                             */
+/*  Header styles - title - search bar - nav bar               */
+/*                                                             */
+/***************************************************************/
 #search-div {
     display: flex;
+    flex-wrap: wrap;    
     width: auto;
+
+    div {
+        display: flex;
+        width: 100%;
+    }
 
     button {
         margin-bottom: .5rem;
@@ -49,6 +61,21 @@ h1, h2, h3 {
     text-decoration: underline;
   }
 
+  #category-bar {
+    width: 100%;
+}
+
+#text-search {
+    width: 100%;
+}
+
+
+/***************************************************************/
+/*                                                             */
+/*  Media queries to size main container and to wrap search    */
+/*                                                             */
+/***************************************************************/
+
 @media (min-width: 1200px) {
 
     .container {
@@ -61,28 +88,29 @@ h1, h2, h3 {
 }
 
 @media (min-width: 750px) {
-    #gif-gallery {
+
+    #search-div {
+        flex-wrap: nowrap;    
+    }
+
+     #gif-gallery {
         flex-wrap: nowrap;
     }
 }
 
-.hide {
-    display: none;
+@media (max-width: 450px) {
+ 
 }
 
 
-#category-bar {
-    width: 100%;
-}
 
-#text-search {
-    width: 100%;
-}
 
-#more {
-    margin: auto;
-    display: block;
-}
+
+/***************************************************************/
+/*                                                             */
+/*  Body styling - title and gif layout                        */
+/*                                                             */
+/***************************************************************/
 
 body {
     @include standardPadding($brandPadding);
@@ -157,9 +185,7 @@ body {
 
 
         /*
-        .overlay:hover {
-            opacity: 1;
-        }
+            Overlay styles
         */
 
         .overlay {
@@ -221,6 +247,8 @@ body {
         }
     }
 
+   
+    /*  The copy link button */
     #copylink {
         position: fixed;
         top: 0;
@@ -245,6 +273,17 @@ body {
         background: transparent;
 
         display: none;
+    }
+
+    /* General purpose hide style */
+    .hide {
+        display: none;
+    }
+    
+    /*  The more button */
+    #more {
+        margin: auto;
+        display: block;
     }
 }
 
