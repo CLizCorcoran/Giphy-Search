@@ -1,8 +1,11 @@
-# Giphy Search Web Application
+# Find My Gif - Giphy Search Web Application
 ## Overview
 This fun little web application is meant to search for gifs.  It uses API endpoints surfaced by GIPHY (giphy.com).  
 
-The webapp was written for my Web Development class's second project to showcase knowledge in HTML, SASS/CSS, Bootstrap, and jQuery.  Webpack was used to bundle the files together to allow for Giphy Search to be hosted and therefor run through GitHub Pages.  
+The webapp was written for my Web Development class's second project to showcase knowledge in HTML, SASS/CSS, Bootstrap, and jQuery.  Webpack was used to bundle the files together to allow for Find My Gif to be hosted and therefore run through GitHub Pages.  
+
+This app can be run through GitHub Pages at:
+https://clizcorcoran.github.io/Giphy-Search/
 
 
 ## User Stories
@@ -36,7 +39,7 @@ Trending gifs is the pages that comes up by default.  These gifs are collected v
 
 
 ### Categories
-The list of categories is obtained via Giphy's Categories endpoint.  That endpoint returns all of the categories along with a featured gif for representation.  
+The list of categories is obtained via Giphy's Categories endpoint.  That endpoint returns all the categories along with a featured gif for representation.  
 
 Selecting a subcategory simply uses that string as input into Giphy's generic Search endpoint.  
 
@@ -48,7 +51,7 @@ The list of trending searches is obtained through Giphy's Trending Search Terms 
 Selecting a trending search simply uses that string as input into Giphy's generic Search endpoint.  
 
 ### Favorites
-Favorites allow the user to see all of the gifs that have been favorited.  It should be noted that this information is not persisted after the web page is closed.  
+Favorites allow the user to see all the gifs that have been favorited.  It should be noted that this information is not persisted after the web page is closed.  
 
 
 ## Technologies Used
