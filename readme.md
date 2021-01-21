@@ -1,36 +1,64 @@
-# Personal Website for Christie Corcoran
+# Giphy Search Web Application
 ## Overview
-This website is meant to introduce potential employers to Christie's background as well as her present ambitions.  
+This fun little web application is meant to search for gifs.  It uses API endpoints surfaced by GIPHY (giphy.com).  
 
-It was written for her Web Development class to showcase some of her knowledge of HTML and CSS as well as her initial learnings of Bootstrap (Bootstrap 4 is the version used).  
+The webapp was written for my Web Development class's second project to showcase knowledge in HTML, SASS/CSS, Bootstrap, and jQuery.  Webpack was used to bundle the files together to allow for Giphy Search to be hosted and therefor run through GitHub Pages.  
+
 
 ## User Stories
-As a recruiter, I would like to get to know this candidate better so that I can see if they are a good match for the job I am looking to fill.
+As a user, I would like to be able to search for Gifs via my own search string.  
 
-As a small business owner, I am interested in getting more information from this freelance web designer to see how they could build my company’s website.  
+As a user, I would like to be able to browse gifs grouped in categories.  
 
-As a young professional, I am interested in learning more about Christie to see if she would be a good mentor.  
+As a user, I would like to be able to tag my favorite gifs so that I can view them all later.  
 
 
-## About the Website
-The website consists of three pages - Welcome (welcome.html), Experience (experience.html), and Contact (contact.html).  The 'first' page would be welcome.html.    
+## About the Web Application
+The main, and only, page to this web application is index.html.  Because the application was bundled through webpack, starting page is the index.html within the dist directory.  
 
-### Welcome
-The Welcome page introduces the user to Christie and a summary of her history.  It uses a two column layout which wraps when the page is reduced in size.  
+The page dynamically changes as the user selects how to search or browse gifs.  
 
-### Experience
-The Experience page details Christie's experience on major projects she's worked on throughout the years as well as what she is up to today.  This page utilizes the Bootstrap 
-carousel component - it has 3 slides.  Note that the carousel height changes as the browser window's size is reduced.  
 
-### Contact
-The Contact page allows the user an opportunity to get in touch with Christie.  It should be noted that the Submit button does not actually send an email yet.  Instead, the user
-will get a pop up modal dialog informing them that this feature it not yet working.  
+### Gif Gallery
+
+No matter how the user chooses to browse their gifs, the gallery rendering is the same.  Large screen sizes will render 4 columns, medium sizes will render 2, and smaller sizes only 1.  
+
+Gifs are returned with a constant width but varying heights.  Calculations are done to keep the overall column height as similar as 
+possible.  
+
+25 gifs are returned at a time; however, a more button is rendered so the user can continuously fetch another 25 until no more gifs are left.  
+
+Hovering over each rendered gif will allow the user to 'favorite' or 'unfavorite' it or to copy the gif's url.  
+
+
+### Trending
+Trending gifs is the pages that comes up by default.  These gifs are collected via the Giphy's Trending endpoint.  
+
+
+### Categories
+The list of categories is obtained via Giphy's Categories endpoint.  That endpoint returns all of the categories along with a featured gif for representation.  
+
+Selecting a subcategory simply uses that string as input into Giphy's generic Search endpoint.  
+
+
+
+### Popular Searches
+The list of trending searches is obtained through Giphy's Trending Search Terms endpoint.  
+
+Selecting a trending search simply uses that string as input into Giphy's generic Search endpoint.  
+
+### Favorites
+Favorites allow the user to see all of the gifs that have been favorited.  It should be noted that this information is not persisted after the web page is closed.  
+
 
 ## Technologies Used
-This website was build using HTML and CSS.  Bootstrap was also imported and is used in several instances (general default theming and carousel).  No JavaScript was harmed in the making of this Website.  
+This website was build using HTML, SASS (compiled into CSS), JavaScript, and jQuery.  Bootstrap was also imported and is used for general theming and in the Navigation bar.  
+
 
 ## Future improvements
-- Add list of skills to the Experience page.  As the user scrolls through the carousel, the skills used in that project are bolded.  
-- Get the submit button working with sending an email  
-- The styling still needs more attention.  
-- The CSS could use some cleanup.  Normalizing naming conventions, separating out css files per page, and utilizing Sass would all help tidy things up a bit.  
+I spent a bit more time on this than I was probably meant to.  At some point, I had to stop.  Some things I would like to improve are:
+
+- Favorites:  I did not get the gif layout working as well for Favorites as in the other sections.  I'm also not happy with the rendering on the hearts on this page.  
+
+- Copy gif:  When the user selects the copy link button, the url is pasted into the clipboard.  If the user pastes this link into a text, it is the url that is pasted, not the actual image.  In most cases, the user wants the actual image.  
+
